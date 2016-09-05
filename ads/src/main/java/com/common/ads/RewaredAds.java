@@ -25,7 +25,6 @@ public class RewaredAds extends AdsPlatform implements AdColonyAdAvailabilityLis
 
 	private String APP_ID;
 	private String ZONE_ID;
-	private boolean needCallLoadListener;
 
 	public  RewaredAds(Activity var, String app_id,String zone_id){
 		super(var);
@@ -47,12 +46,11 @@ public class RewaredAds extends AdsPlatform implements AdColonyAdAvailabilityLis
 		contextActivry.runOnUiThread(new Runnable() {
 			@Override
 			public void run() {
-				needCallLoadListener = true;
+
 				if (isLoaded()) {
-					if (listener != null&&needCallLoadListener) {
+					if (listener != null) {
 						listener.onLoadedSuccess(RewaredAds.this);
 					}
-					needCallLoadListener = false;
 					if(isAutoShow)
 						show();
 				}else {
@@ -99,13 +97,15 @@ public class RewaredAds extends AdsPlatform implements AdColonyAdAvailabilityLis
 
 	@Override
 	public void onAdColonyAdAvailabilityChange(boolean b, String s) {
-		if(listener != null&&needCallLoadListener) {
-			if(b)
+		if(listener != null) {
+			if(b) {
 				listener.onLoadedSuccess(this);
+				if(isAutoShow)
+					show();
+			}
 			else
 				listener.onLoadedFail(this);
 		}
-		needCallLoadListener = false;
 	}
 
 	@Override
