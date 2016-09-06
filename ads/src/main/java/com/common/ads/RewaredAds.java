@@ -20,12 +20,12 @@ import com.jirbo.adcolony.AdColonyV4VCReward;
 public class RewaredAds extends AdsPlatform implements AdColonyAdAvailabilityListener, AdColonyV4VCListener,AdColonyAdListener,Application.ActivityLifecycleCallbacks {
 
 	public interface RewaredAdsListener extends AdsListener {
-		void onRewarded(String var,int var2,boolean var3);
+		void onRewarded(String var,int amount,boolean isSkip);
 	}
 
 	private String APP_ID;
 	private String ZONE_ID;
-
+    private AdColonyV4VCAd adColonyV4VCAd;
 	public  RewaredAds(Activity var, String app_id,String zone_id){
 		super(var);
 		APP_ID = app_id;
@@ -39,6 +39,7 @@ public class RewaredAds extends AdsPlatform implements AdColonyAdAvailabilityLis
 			AdColony.addAdAvailabilityListener(this);
 			AdColony.addV4VCListener(this);
 		}
+		 adColonyV4VCAd = (new AdColonyV4VCAd()).withListener(RewaredAds.this);
 	}
 
 	@Override
@@ -55,6 +56,9 @@ public class RewaredAds extends AdsPlatform implements AdColonyAdAvailabilityLis
 						show();
 				}else {
 					initConfig();
+					if(adColonyV4VCAd == null)
+						adColonyV4VCAd = (new AdColonyV4VCAd()).withListener(RewaredAds.this);
+
 				}
 			}
 		});
@@ -69,7 +73,7 @@ public class RewaredAds extends AdsPlatform implements AdColonyAdAvailabilityLis
 				@Override
 				public void run() {
 					initConfig();
-					AdColonyV4VCAd adColonyV4VCAd = (new AdColonyV4VCAd()).withListener(RewaredAds.this);
+					adColonyV4VCAd = (new AdColonyV4VCAd()).withListener(RewaredAds.this);
 					adColonyV4VCAd.show();
 				}
 			});
@@ -103,8 +107,8 @@ public class RewaredAds extends AdsPlatform implements AdColonyAdAvailabilityLis
 				if(isAutoShow)
 					show();
 			}
-			else
-				listener.onLoadedFail(this);
+//			else
+//				listener.onLoadedFail(this);
 		}
 	}
 

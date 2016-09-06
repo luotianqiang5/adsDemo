@@ -22,7 +22,18 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
+        <meta-data
+            android:name="Pad Banner"
+            android:value="ca-mb-app-pub-5545962412010602/6808238519" />
+        <meta-data
+            android:name="Phone Banner"
+            android:value="ca-mb-app-pub-5545962412010602/5331530639" />
+        <meta-data
+            android:name="Rewarded AppID"
+            android:value="app65e37f7ecffd4e939b" />
+        <meta-data
+            android:name="Rewarded Signature"
+            android:value="vz6492a0aa094044d081" />
     </application>
 
 </manifest>

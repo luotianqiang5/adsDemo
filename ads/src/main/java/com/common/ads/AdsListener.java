@@ -1,6 +1,5 @@
 package com.common.ads;
 
-import java.util.Objects;
 
 /**
  * Created by luotianqiang1 on 16/9/2.
@@ -17,6 +16,6 @@ public interface AdsListener {
 
 	void onAdsClicked(AdsPlatform var);
 
-	void onOtherEvent(AdsPlatform var,String tag, Objects... data);
+	void onOtherEvent(AdsPlatform var,String tag, Object... data);
 
 }
