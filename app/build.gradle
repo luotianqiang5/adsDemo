@@ -11,7 +11,10 @@ android {
         versionCode 1
         versionName "1.0"
 
-
+        ndk {
+            moduleName "ads"
+            cFlags ="-std=c++11"
+        }
     }
     buildTypes {
         release {

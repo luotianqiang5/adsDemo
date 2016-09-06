@@ -23,12 +23,11 @@ public class MainActivity extends AppCompatActivity {
 	final private String banneradUiId = "ca-mb-app-pub-5545962412010602/6808238519";
 
 
-
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		AdsManager.getInstance(this).setUpWithJni(AdsType.REWARD|AdsType.BANNER);
+		AdsManager.getInstance(this).setup(AdsType.REWARD|AdsType.BANNER);
 
 		this.findViewById(R.id.preload_banner).setOnClickListener(lis);
 		this.findViewById(R.id.show_banne).setOnClickListener(lis);

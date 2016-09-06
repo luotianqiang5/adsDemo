@@ -8,14 +8,14 @@
 
 class AdsManager {
 private:
-    static AdsManager* instance = nullptr;
+    static AdsManager* instance;
 public:
     static AdsManager* getInstance(){
-        if(instance == nullptr)
+        if(!instance)
             instance = new AdsManager();
         return instance;
     }
 };
 
-
+AdsManager* AdsManager::instance = nullptr;
 #endif //ADS_DEMO_ADSMANAGER_H

@@ -6,11 +6,6 @@ import android.app.Activity;
  * Created by luotianqiang1 on 16/9/6.
  */
 public class AdsManager {
-	static {
-		System.loadLibrary("ads");
-
-	}
-
 	static private final String PAD_BANNER_KEY = "Pad Banner";
 	static private final String PHONE_BANNER_KEY = "Phone Banner";
 	static private final String PAD_INTERSTITIAL_KEY = "Pad Interstitial";
