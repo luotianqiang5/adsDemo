@@ -259,4 +259,9 @@ public class AdsManager {
 		return null;
 	}
 
+
+	public boolean isFullScreenShowing(){
+		return  FullScreenAds.isFullScreenAdsShowing();
+	}
+
 }
