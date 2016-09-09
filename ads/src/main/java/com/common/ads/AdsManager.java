@@ -21,7 +21,7 @@ public class AdsManager {
 	CrosspomoAds crosspomoAds;
 	InterstitialAds interstitialAds;
 	RewaredAds rewaredAds;
-	BannerAds bannerAds; 
+	BannerAds bannerAds;
 
 
 	RewaredAds.RewaredAdsListener rewaredAdsListener = new RewaredAds.RewaredAdsListener() {
