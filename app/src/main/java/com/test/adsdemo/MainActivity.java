@@ -27,7 +27,9 @@ public class MainActivity extends AppCompatActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		AdsManager.getInstance(this).setup(AdsType.REWARD|AdsType.BANNER);
+		AdsManager.getInstance(this).setup(AdsType.REWARD | AdsType.BANNER);
+		AdsManager.getInstance(this).getAds(AdsType.REWARD).setListener(Adslis);
+		AdsManager.getInstance(this).getAds(AdsType.BANNER).setListener(Adslis);
 
 		this.findViewById(R.id.preload_banner).setOnClickListener(lis);
 		this.findViewById(R.id.show_banne).setOnClickListener(lis);
@@ -115,6 +117,6 @@ public class MainActivity extends AppCompatActivity {
 	@Override
 	protected void onResume() {
 		super.onResume();
-		AdsManager.getInstance(this).showAds(AdsType.REWARD);
+
 	}
 }
