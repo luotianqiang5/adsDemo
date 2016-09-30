@@ -28,7 +28,7 @@ public class BannerAds extends AdsPlatform implements Application.ActivityLifecy
 	protected RelativeLayout adViewPanel;
 	protected FrameLayout.LayoutParams adViewLayoutParams;
 	protected boolean isActive;
-    protected boolean isLoad;
+
 
 	private AdListener admobAdListener = new AdListener(){
 		@Override
@@ -146,10 +146,6 @@ public class BannerAds extends AdsPlatform implements Application.ActivityLifecy
 		return true;
 	}
 
-	@Override
-	public boolean isLoaded() {
-		return isLoad;
-	}
 
 	@Override
 	public void destroy() {

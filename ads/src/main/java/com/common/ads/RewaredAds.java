@@ -55,6 +55,7 @@ public class RewaredAds extends AdsPlatform implements RewardedVideoAdListener,A
 				} else {
 					synchronized (mLock) {
 						if (!mIsRewardedVideoLoading) {
+							isLoad = false;
 							mIsRewardedVideoLoading = true;
 							RewardedVideoAd mAd = MobileAds.getRewardedVideoAdInstance(contextActivry);
 							Bundle extras = new Bundle();
@@ -90,10 +91,6 @@ public class RewaredAds extends AdsPlatform implements RewardedVideoAdListener,A
 		}
 	}
 
-	@Override
-	public boolean isLoaded() {
-		return MobileAds.getRewardedVideoAdInstance(contextActivry).isLoaded();
-	}
 
 	@Override
 	public  void destroy(){
@@ -111,6 +108,7 @@ public class RewaredAds extends AdsPlatform implements RewardedVideoAdListener,A
 	@Override
 	public void onRewardedVideoAdLoaded() {
 		synchronized (mLock) {
+			isLoad = true;
 			mIsRewardedVideoLoading = false;
 		}
 		if(listener != null) {
@@ -134,11 +132,13 @@ public class RewaredAds extends AdsPlatform implements RewardedVideoAdListener,A
 
 	@Override
 	public void onRewardedVideoAdClosed() {
+		isLoad = false;
 		FullScreenAds.setFullScreenAdsShowing(false);
 		if(listener != null) {
 			if(listener instanceof  RewaredAdsListener)
 				((RewaredAdsListener) listener).onRewarded("Reward", count,isSkip);
-			listener.onAdsClosed(this);
+			else
+				listener.onAdsClosed(this);
 			preload();
 		}
 	}
@@ -156,6 +156,7 @@ public class RewaredAds extends AdsPlatform implements RewardedVideoAdListener,A
 
 	@Override
 	public void onRewardedVideoAdFailedToLoad(int i) {
+		isLoad = false;
 		synchronized (mLock) {
 			mIsRewardedVideoLoading = false;
 		}

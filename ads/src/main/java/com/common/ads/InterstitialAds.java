@@ -11,13 +11,13 @@ import com.google.android.gms.ads.InterstitialAd;
  */
 public class InterstitialAds extends AdsPlatform {
 	private String adUnitId;
-	private  boolean isLoaded;
 	private InterstitialAd admobInterstitial;
 
 	private AdListener admobAdListener = new AdListener() {
 		@Override
 		public void onAdClosed() {
 			super.onAdClosed();
+			isLoad = false;
 			FullScreenAds.setFullScreenAdsShowing(false);
 			if(listener != null)
 				listener.onAdsClosed(InterstitialAds.this);
@@ -27,6 +27,7 @@ public class InterstitialAds extends AdsPlatform {
 		@Override
 		public void onAdFailedToLoad(int errorCode) {
 			super.onAdFailedToLoad(errorCode);
+			isLoad = false;
 			if(listener != null)
 				listener.onLoadedFail(InterstitialAds.this);
 		}
@@ -47,6 +48,7 @@ public class InterstitialAds extends AdsPlatform {
 		@Override
 		public void onAdLoaded() {
 			super.onAdLoaded();
+			isLoad = true;
 			if(listener != null)
 				listener.onLoadedSuccess(InterstitialAds.this);
 		}
@@ -67,12 +69,13 @@ public class InterstitialAds extends AdsPlatform {
 
 	@Override
 	public void preload() {
-		isLoaded = false;
+
 		contextActivry.runOnUiThread(new Runnable() {
 			@Override
 			public void run() {
 				initConfig();
-				if (!admobInterstitial.isLoaded() && !admobInterstitial.isLoaded()) {
+				if (admobInterstitial != null&& !admobInterstitial.isLoaded()) {
+					isLoad = false;
 					AdRequest adRequest = new AdRequest.Builder().build();
 					try {
 						admobInterstitial.loadAd(adRequest);
@@ -90,7 +93,7 @@ public class InterstitialAds extends AdsPlatform {
 	public boolean show() {
 		if(FullScreenAds.isFullScreenAdsShowing())
 			return true;
-		else if(admobInterstitial != null && contextActivry != null&&admobInterstitial.isLoaded()) {
+		else if(admobInterstitial != null && contextActivry != null&&isLoaded()) {
 			contextActivry.runOnUiThread(new Runnable() {
 				@Override
 				public void run() {
@@ -104,10 +107,6 @@ public class InterstitialAds extends AdsPlatform {
 		}
 	}
 
-	@Override
-	public boolean isLoaded() {
-		return admobInterstitial !=null&& admobInterstitial.isLoaded();
-	}
 
 	@Override
 	public void destroy() {

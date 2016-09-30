@@ -1,1 +1,1 @@
-include ':app', ':ads'
+include ':app', ':ads', ':component'

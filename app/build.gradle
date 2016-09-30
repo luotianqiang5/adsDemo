@@ -10,12 +10,9 @@ android {
         targetSdkVersion 23
         versionCode 1
         versionName "1.0"
-
-        ndk {
-            moduleName "ads"
-            cFlags ="-std=c++11"
-        }
     }
+
+
     buildTypes {
         release {
             minifyEnabled false
@@ -27,7 +24,11 @@ android {
             dirs "libs"
         }
     }
+
+
 }
+
+
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
@@ -35,4 +36,5 @@ dependencies {
     compile 'com.google.android.gms:play-services:8.4.0'
     // compile (name:'ads', ext: 'aar')
     compile project(':ads')
+    compile project(':component')
 }

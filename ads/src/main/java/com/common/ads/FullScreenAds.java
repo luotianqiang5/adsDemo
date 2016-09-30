@@ -14,12 +14,17 @@ public class FullScreenAds {
 	}
 
 	public static void setFullScreenAdsShowing(final  boolean fullScreenAdsShowing) {
-		Handler handler = new Handler(Looper.getMainLooper());
-		handler.postDelayed(new Runnable() {
-			@Override
-			public void run() {
-				FullScreenAds.fullScreenAdsShowing = fullScreenAdsShowing;
-			}
-		},300L);
+		if(fullScreenAdsShowing) {
+			FullScreenAds.fullScreenAdsShowing = true;
+		}
+		else {
+			Handler handler = new Handler(Looper.getMainLooper());
+			handler.postDelayed(new Runnable() {
+				@Override
+				public void run() {
+					FullScreenAds.fullScreenAdsShowing = false;
+				}
+			}, 300L);
+		}
 	}
 }

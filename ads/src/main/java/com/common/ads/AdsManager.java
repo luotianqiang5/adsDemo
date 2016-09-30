@@ -1,6 +1,7 @@
 package com.common.ads;
 
 import android.app.Activity;
+import android.util.Log;
 
 /**
  * Created by luotianqiang1 on 16/9/6.
@@ -93,6 +94,7 @@ public class AdsManager {
 		}
 	};
 
+	native void init();
 	native void onRewarded(int adsType,String var, int amount,boolean isSkip);
 	native void onLoadedSuccess(int adsType);
 	native void onLoadedFail(int adsType);
@@ -112,15 +114,16 @@ public class AdsManager {
 	}
 
 	public void setUpWithJni(int adType){
+		init();
 		setup(adType);
 		if(bannerAds != null)
 			bannerAds.setListener(adsListener);
 		if(crosspomoAds != null)
 			crosspomoAds.setListener(adsListener);
 		if(rewaredAds != null)
-			rewaredAds.setListener(adsListener);
-		if(crosspomoAds != null)
-			crosspomoAds.setListener(adsListener);
+			rewaredAds.setListener(rewaredAdsListener);
+		if(interstitialAds != null)
+			interstitialAds.setListener(adsListener);
 	}
 
 
@@ -194,24 +197,26 @@ public class AdsManager {
 		}
 	}
 
-	public void showAds(int adType) {
+	public boolean showAds(int adType) {
+		boolean flag = false;
 		switch (adType){
 			case AdsType.BANNER:
 				if(bannerAds != null)
-					bannerAds.show();
+					flag =bannerAds.show();
 				break;
 			case AdsType.REWARD:
 				if(rewaredAds != null)
-					rewaredAds.show();
+					flag =rewaredAds.show();
 				break;
 			case AdsType.CROSS:
 				if(crosspomoAds != null)
-					crosspomoAds.show();
+					flag =crosspomoAds.show();
 				break;
 			case AdsType.INTERSTITIAL:
 				if(interstitialAds != null)
-					interstitialAds.show();
+					flag =interstitialAds.show();
 		}
+		return flag;
 	}
 
 	public void destory() {
@@ -263,4 +268,34 @@ public boolean isFullScreenShowing(){
 return  FullScreenAds.isFullScreenAdsShowing();
 }
 
+	void setAutoShow(int adsTye, boolean bIsAuto){
+		AdsPlatform ads = getAds(adsTye);
+		if(ads != null)
+			ads.setAutoShow(bIsAuto);
+	}
+
+	boolean isAutoShow(int adsTye){
+		AdsPlatform ads = getAds(adsTye);
+		if(ads != null)
+			return ads.getIsAutoShow();
+		else
+			return false;
+	}
+	void remove(int adsTye){
+		switch(adsTye) {
+			case AdsType.BANNER:
+				if(bannerAds != null) {
+					bannerAds.remove();
+				}
+				break;
+		}
+	}
+
+	boolean isPreloaded(int adsTye) {
+		AdsPlatform ads = getAds(adsTye);
+		if(ads != null)
+			return ads.isLoaded();
+		else
+			return false;
+	}
 }

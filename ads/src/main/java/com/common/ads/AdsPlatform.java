@@ -10,7 +10,7 @@ public abstract class AdsPlatform {
 	protected Activity contextActivry;
 	protected AdsListener listener;
 	protected boolean isAutoShow;
-
+	protected boolean isLoad;
 	public AdsPlatform(Activity var) {
 		contextActivry = var;
 	}
@@ -19,7 +19,9 @@ public abstract class AdsPlatform {
 
 	public abstract boolean show();
 
-	public abstract boolean isLoaded();
+	public  boolean isLoaded(){
+		return isLoad;
+	}
 
 	public abstract void destroy();
 
@@ -36,5 +38,6 @@ public abstract class AdsPlatform {
 	public void setAutoShow(boolean flag) {
 		isAutoShow = flag;
 	}
+	public boolean getIsAutoShow(){return isAutoShow;}
 
 }

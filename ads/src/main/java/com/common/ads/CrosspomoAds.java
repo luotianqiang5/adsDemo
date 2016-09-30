@@ -5,7 +5,6 @@ import android.app.Application;
 import android.os.Bundle;
 import android.os.Handler;
 
-import com.chartboost.sdk.CBImpressionActivity;
 import com.chartboost.sdk.CBLocation;
 import com.chartboost.sdk.Chartboost;
 import com.chartboost.sdk.ChartboostDelegate;
@@ -18,7 +17,6 @@ import com.chartboost.sdk.Model.CBError.CBImpressionError;
 public class CrosspomoAds extends AdsPlatform implements Application.ActivityLifecycleCallbacks{
 	private String appId;
 	private String appSignature;
-    private boolean isLoaded;
 	private boolean isDismissIntersiticalCallbacked;
 	private boolean isCrossporoAdsShowing;
 	ChartboostDelegate delegate = new ChartboostDelegate() {
@@ -27,20 +25,20 @@ public class CrosspomoAds extends AdsPlatform implements Application.ActivityLif
 		}
 
 		public void didCacheInterstitial(String location) {
-			isLoaded = true;
+			isLoad = true;
 			if(listener != null)
 				listener.onLoadedSuccess(CrosspomoAds.this);
 
 		}
 
 		public void didFailToLoadInterstitial(String location, CBImpressionError error) {
-			 isLoaded = false;
+			//isLoad = false;
 			if(listener != null)
 				listener.onLoadedFail(CrosspomoAds.this);
 		}
 
 		public void didDismissInterstitial(String location) {
-			isLoaded = false;
+			isLoad = false;
 			isDismissIntersiticalCallbacked = true;
 			FullScreenAds.setFullScreenAdsShowing(false);
 			if(listener != null)
@@ -102,13 +100,13 @@ public class CrosspomoAds extends AdsPlatform implements Application.ActivityLif
 
 	@Override
 	public void onActivityStarted(Activity activity) {
-		if(!(activity instanceof CBImpressionActivity))
+		if(activity == contextActivry)
 			Chartboost.onStart(activity);
 	}
 
 	@Override
 	public void onActivityResumed(Activity activity) {
-		if(!(activity instanceof CBImpressionActivity)) {
+		if(activity == contextActivry) {
 			Chartboost.onResume(activity);
 			if(this.isCrossporoAdsShowing && Chartboost.getDelegate() != null && !this.isDismissIntersiticalCallbacked) {
 				Chartboost.getDelegate().didDismissInterstitial(CBLocation.LOCATION_DEFAULT);
@@ -118,9 +116,9 @@ public class CrosspomoAds extends AdsPlatform implements Application.ActivityLif
 
 	@Override
 	public void onActivityPaused(Activity activity) {
-		if(!(activity instanceof CBImpressionActivity)) {
+		if(activity == contextActivry) {
 			Chartboost.onPause(activity);
-			if(this.isLoaded) {
+			if(this.isLoad) {
 				this.isDismissIntersiticalCallbacked = false;
 			}
 		}
@@ -128,7 +126,7 @@ public class CrosspomoAds extends AdsPlatform implements Application.ActivityLif
 
 	@Override
 	public void onActivityStopped(Activity activity) {
-		if(!(activity instanceof CBImpressionActivity)) {
+		if(activity == contextActivry) {
 			Chartboost.onStop(activity);
 		}
 	}
@@ -140,7 +138,7 @@ public class CrosspomoAds extends AdsPlatform implements Application.ActivityLif
 
 	@Override
 	public void onActivityDestroyed(Activity activity) {
-		if(!(activity instanceof CBImpressionActivity)) {
+		if(activity == contextActivry) {
 			Chartboost.onDestroy(activity);
 		}
 		destroy();
@@ -174,10 +172,6 @@ public class CrosspomoAds extends AdsPlatform implements Application.ActivityLif
 			return false;
 	}
 
-	@Override
-	public boolean isLoaded() {
-		return isLoaded;
-	}
 
 	@Override
 	public void destroy() {

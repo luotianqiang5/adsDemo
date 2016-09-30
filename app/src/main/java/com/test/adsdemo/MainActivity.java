@@ -1,7 +1,8 @@
 package com.test.adsdemo;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
 import com.chartboost.sdk.Chartboost;
@@ -9,9 +10,10 @@ import com.common.ads.AdsListener;
 import com.common.ads.AdsManager;
 import com.common.ads.AdsPlatform;
 import com.common.ads.AdsType;
+import com.common.android.LaunchActivity;
 
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends LaunchActivity  {
 
 	final private String APP_ID = "app65e37f7ecffd4e939b";
 	final private String ZONE_ID = "vz6492a0aa094044d081";
@@ -21,7 +23,6 @@ public class MainActivity extends AppCompatActivity {
 
 	final private String adUiId = "ca-mb-app-pub-5545962412010602/5331530639";
 	final private String banneradUiId = "ca-mb-app-pub-5545962412010602/6808238519";
-
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -90,7 +91,10 @@ public class MainActivity extends AppCompatActivity {
 		public void onClick(View v) {
 			switch (v.getId()) {
 				case R.id.preload_banner:
-					AdsManager.getInstance(MainActivity.this).preLoadAds(AdsType.BANNER);
+					Uri uri = Uri.parse("market://details?id=com.crazycampmedia.android_forestdoctor");
+					Intent myAppLinkToMarket = new Intent(Intent.ACTION_VIEW, uri);
+					MainActivity.this.startActivity(myAppLinkToMarket);
+					//AdsManager.getInstance(MainActivity.this).preLoadAds(AdsType.BANNER);
 					break;
 				case R.id.show_banne:
 					AdsManager.getInstance(MainActivity.this).showAds(AdsType.BANNER);
@@ -118,5 +122,25 @@ public class MainActivity extends AppCompatActivity {
 	protected void onResume() {
 		super.onResume();
 
+	}
+
+	@Override
+	public int getPlatformCode() {
+		return 32;
+	}
+
+	@Override
+	public boolean getDebugMode() {
+		return false;
+	}
+
+	@Override
+	public int getAnalyticsCode() {
+		return 0;
+	}
+
+	@Override
+	public boolean enableEvent() {
+		return false;
 	}
 }
