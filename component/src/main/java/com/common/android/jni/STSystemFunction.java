@@ -101,6 +101,10 @@ public class STSystemFunction {
 		});
 	}
 
+	public void cacheMoreGame() {
+		Chartboost.cacheMoreApps(CBLocation.LOCATION_DEFAULT);
+	}
+
 	public void showMoreGame() {
 
 		if(Chartboost.hasMoreApps(CBLocation.LOCATION_DEFAULT)){
