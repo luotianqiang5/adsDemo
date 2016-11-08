@@ -5,19 +5,19 @@ import android.app.Activity;
 import android.app.Application;
 import android.os.Bundle;
 
-import com.google.ads.mediation.admob.AdMobAdapter;
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.MobileAds;
-import com.google.android.gms.ads.reward.RewardItem;
-import com.google.android.gms.ads.reward.RewardedVideoAd;
-import com.google.android.gms.ads.reward.RewardedVideoAdListener;
+import com.jirbo.adcolony.AdColony;
+import com.jirbo.adcolony.AdColonyAd;
+import com.jirbo.adcolony.AdColonyAdAvailabilityListener;
+import com.jirbo.adcolony.AdColonyAdListener;
+import com.jirbo.adcolony.AdColonyV4VCAd;
+import com.jirbo.adcolony.AdColonyV4VCListener;
+import com.jirbo.adcolony.AdColonyV4VCReward;
 
 
 /**
  * Created by luotianqiang1 on 16/9/2.
  */
-public class RewaredAds extends AdsPlatform implements RewardedVideoAdListener,Application.ActivityLifecycleCallbacks {
-
+public class RewaredAds extends AdsPlatform implements AdColonyAdAvailabilityListener, AdColonyV4VCListener,AdColonyAdListener,Application.ActivityLifecycleCallbacks {
 
 	public interface RewaredAdsListener extends AdsListener {
 		void onRewarded(String var,int amount,boolean isSkip);
@@ -25,20 +25,22 @@ public class RewaredAds extends AdsPlatform implements RewardedVideoAdListener,A
 
 	private String APP_ID;
 	private String ZONE_ID;
-	private final Object mLock = new Object();
-	private boolean mIsRewardedVideoLoading;
-	private boolean isSkip = true;
-    private int count = -1;
-
+    private AdColonyV4VCAd adColonyV4VCAd;
 	public  RewaredAds(Activity var, String app_id,String zone_id){
 		super(var);
 		APP_ID = app_id;
 		ZONE_ID = zone_id;
 		contextActivry.getApplication().registerActivityLifecycleCallbacks(this);
-		RewardedVideoAd mAd = MobileAds.getRewardedVideoAdInstance(contextActivry);
-		mAd.setRewardedVideoAdListener(this);
 	}
 
+	private void initConfig() {
+		if(!AdColony.isConfigured()){
+			AdColony.configure(contextActivry, "version:10,store:google", APP_ID, ZONE_ID);
+			AdColony.addAdAvailabilityListener(this);
+			AdColony.addV4VCListener(this);
+		}
+		 adColonyV4VCAd = (new AdColonyV4VCAd()).withListener(RewaredAds.this);
+	}
 
 	@Override
 	public void preload() {
@@ -50,22 +52,13 @@ public class RewaredAds extends AdsPlatform implements RewardedVideoAdListener,A
 					if (listener != null) {
 						listener.onLoadedSuccess(RewaredAds.this);
 					}
-					if (isAutoShow)
+					if(isAutoShow)
 						show();
-				} else {
-					synchronized (mLock) {
-						if (!mIsRewardedVideoLoading) {
-							isLoad = false;
-							mIsRewardedVideoLoading = true;
-							RewardedVideoAd mAd = MobileAds.getRewardedVideoAdInstance(contextActivry);
-							Bundle extras = new Bundle();
-							extras.putBoolean("_noRefresh", true);
-							AdRequest adRequest = new AdRequest.Builder()
-									.addNetworkExtrasBundle(AdMobAdapter.class, extras)
-									.build();
-							mAd.loadAd(ZONE_ID, adRequest);
-						}
-					}
+				}else {
+					initConfig();
+					if(adColonyV4VCAd == null)
+						adColonyV4VCAd = (new AdColonyV4VCAd()).withListener(RewaredAds.this);
+
 				}
 			}
 		});
@@ -76,12 +69,12 @@ public class RewaredAds extends AdsPlatform implements RewardedVideoAdListener,A
 		if(FullScreenAds.isFullScreenAdsShowing()) {
 			return true;
 		}else if(isLoaded()){
-			isSkip = true;
-			count = -1;
 			contextActivry.runOnUiThread(new Runnable() {
 				@Override
 				public void run() {
-					MobileAds.getRewardedVideoAdInstance(contextActivry).show();
+					initConfig();
+					adColonyV4VCAd = (new AdColonyV4VCAd()).withListener(RewaredAds.this);
+					adColonyV4VCAd.show();
 				}
 			});
 			return true;
@@ -102,66 +95,49 @@ public class RewaredAds extends AdsPlatform implements RewardedVideoAdListener,A
 		return AdsType.REWARD;
 	}
 
-
-
-
 	@Override
-	public void onRewardedVideoAdLoaded() {
-		synchronized (mLock) {
-			isLoad = true;
-			mIsRewardedVideoLoading = false;
-		}
+	public void onAdColonyAdAvailabilityChange(boolean b, String s) {
+		isLoad  = b;
 		if(listener != null) {
-			listener.onLoadedSuccess(this);
-			if(isAutoShow)
-				show();
+			if(b) {
+				listener.onLoadedSuccess(this);
+				if(isAutoShow)
+					show();
+			}
+//			else
+//				listener.onLoadedFail(this);
 		}
 	}
 
 	@Override
-	public void onRewardedVideoAdOpened() {
+	public void onAdColonyAdAttemptFinished(AdColonyAd adColonyAd) {
+		FullScreenAds.setFullScreenAdsShowing(false);
+		if(adColonyAd.skipped() || adColonyAd.canceled()) {
+			if(listener != null && listener instanceof RewaredAdsListener) {
+				((RewaredAdsListener)listener).onRewarded("", -1, true);
+			}
+			if(listener != null)
+				listener.onAdsClosed(this);
+		}else if(adColonyAd.shown()){
+			if(listener != null)
+				listener.onAdsClosed(this);
+		}
+	}
+
+	@Override
+	public void onAdColonyAdStarted(AdColonyAd adColonyAd) {
 		FullScreenAds.setFullScreenAdsShowing(true);
 		if(listener != null)
 			listener.onAdsOpened(this);
 	}
 
 	@Override
-	public void onRewardedVideoStarted() {
-
-	}
-
-	@Override
-	public void onRewardedVideoAdClosed() {
-		isLoad = false;
-		FullScreenAds.setFullScreenAdsShowing(false);
-		if(listener != null) {
-			if(listener instanceof  RewaredAdsListener)
-				((RewaredAdsListener) listener).onRewarded("Reward", count,isSkip);
-			else
-				listener.onAdsClosed(this);
-			preload();
+	public void onAdColonyV4VCReward(AdColonyV4VCReward adColonyV4VCReward) {
+		if(adColonyV4VCReward.success()) {
+			if(listener != null && listener instanceof  RewaredAdsListener) {
+				((RewaredAdsListener) listener).onRewarded(adColonyV4VCReward.name(), adColonyV4VCReward.amount(),false);
+			}
 		}
-	}
-
-	@Override
-	public void onRewarded(RewardItem rewardItem) {
-		isSkip = false;
-		count = rewardItem.getAmount();
-	}
-
-	@Override
-	public void onRewardedVideoAdLeftApplication() {
-
-	}
-
-	@Override
-	public void onRewardedVideoAdFailedToLoad(int i) {
-		isLoad = false;
-		synchronized (mLock) {
-			mIsRewardedVideoLoading = false;
-		}
-		if(listener != null)
-			listener.onLoadedFail(this);
 	}
 
 	@Override
@@ -177,13 +153,13 @@ public class RewaredAds extends AdsPlatform implements RewardedVideoAdListener,A
 	@Override
 	public void onActivityResumed(Activity activity) {
 		if(activity == contextActivry)
-			MobileAds.getRewardedVideoAdInstance(contextActivry).resume();
+		AdColony.resume(activity);
 	}
 
 	@Override
 	public void onActivityPaused(Activity activity) {
 		if(activity == contextActivry)
-			MobileAds.getRewardedVideoAdInstance(contextActivry).pause();
+		AdColony.pause();
 	}
 
 	@Override
