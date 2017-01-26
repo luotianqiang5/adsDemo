@@ -162,7 +162,7 @@ public abstract class LaunchActivity extends AppCompatActivity {
 		super.onResume();
 		isRunning = true;
 
-		HomeKeyWatcher.getInstance(this).startWathch();
+		//HomeKeyWatcher.getInstance(this).startWathch();
 		Intent intent = new Intent(ACTION_LIFR_CIRCLE_FILTER);
 		intent.putExtra("life_circle", "onResume");
 		sendBroadcast(intent);
@@ -176,7 +176,7 @@ public abstract class LaunchActivity extends AppCompatActivity {
 		Intent intent = new Intent(ACTION_LIFR_CIRCLE_FILTER);
 		intent.putExtra("life_circle", "onPause");
 		sendBroadcast(intent);
-		HomeKeyWatcher.getInstance(this).stopWathch();
+		//HomeKeyWatcher.getInstance(this).stopWathch();
 	}
 
 
