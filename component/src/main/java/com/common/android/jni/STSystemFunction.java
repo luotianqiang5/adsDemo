@@ -81,12 +81,18 @@ public class STSystemFunction {
 
 			@Override
 			public void run() {
-				new AlertDialog.Builder(stContext).setMessage(message)
-						.setPositiveButton(R.string.com_facebook_dialogloginactivity_ok_button, new DialogInterface.OnClickListener() {
-							public void onClick(DialogInterface dialog, int whichButton) {
+				try {
+					if(stContext != null && !stContext.isFinishing())
+						new AlertDialog.Builder(stContext).setMessage(message)
+								.setPositiveButton(R.string.com_facebook_dialogloginactivity_ok_button, new DialogInterface.OnClickListener() {
+									public void onClick(DialogInterface dialog, int whichButton) {
 								/* User clicked OK so do some stuff */
-							}
-						}).setCancelable(false).create().show();
+									}
+								}).setCancelable(false).create().show();
+				}catch (Exception e) {
+
+				}
+
 			}
 		});
 	}

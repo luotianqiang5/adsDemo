@@ -122,11 +122,15 @@ public class BannerAds extends AdsPlatform implements Application.ActivityLifecy
 					@Override
 					public void run() {
 						if(adViewPanel != null&&adViewPanel.getParent() == null && admobView != null && admobView.getParent() == null) {
-							adViewPanel.addView(admobView);
-							adViewContainer.addView(adViewPanel);
-							adViewPanel.setLayoutParams(adViewLayoutParams);
-							if(isLoaded())
-								adViewPanel.setVisibility(View.VISIBLE);
+							try {
+								adViewPanel.addView(admobView);
+								adViewContainer.addView(adViewPanel);
+								adViewPanel.setLayoutParams(adViewLayoutParams);
+								if(isLoaded())
+									adViewPanel.setVisibility(View.VISIBLE);
+							}catch (Exception e){
+
+							}
 						}
 					}
 				});
