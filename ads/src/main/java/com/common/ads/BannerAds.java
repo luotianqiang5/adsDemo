@@ -121,7 +121,7 @@ public class BannerAds extends AdsPlatform implements Application.ActivityLifecy
 				contextActivry.runOnUiThread(new Runnable() {
 					@Override
 					public void run() {
-						if(adViewPanel != null) {
+						if(adViewPanel != null&&adViewPanel.getParent() == null && admobView != null && admobView.getParent() == null) {
 							adViewPanel.addView(admobView);
 							adViewContainer.addView(adViewPanel);
 							adViewPanel.setLayoutParams(adViewLayoutParams);
