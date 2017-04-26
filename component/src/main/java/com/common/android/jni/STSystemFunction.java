@@ -27,6 +27,7 @@ import com.common.android.newsblast.ErrorCode;
 import com.common.android.newsblast.NewsBean;
 import com.common.android.newsblast.NewsBlast;
 import com.common.android.newsblast.NewsBlastListener;
+import com.common.android.utils.Utils;
 
 
 /**
@@ -82,14 +83,14 @@ public class STSystemFunction {
 			@Override
 			public void run() {
 				try {
-					if(stContext != null && !stContext.isFinishing())
+					if (stContext != null && !stContext.isFinishing())
 						new AlertDialog.Builder(stContext).setMessage(message)
 								.setPositiveButton(R.string.com_facebook_dialogloginactivity_ok_button, new DialogInterface.OnClickListener() {
 									public void onClick(DialogInterface dialog, int whichButton) {
 								/* User clicked OK so do some stuff */
 									}
 								}).setCancelable(false).create().show();
-				}catch (Exception e) {
+				} catch (Exception e) {
 
 				}
 
@@ -121,12 +122,12 @@ public class STSystemFunction {
 				@Override
 				public void run() {
 					Uri uri;
-					if (platformCode == PlatformCode.AMAZON) {
-						uri = Uri.parse("http://www.amazon.com/gp/mas/dl/android?p=" + stContext.getPackageName() + "&showAll=1");
+					String uriPath = Utils.getMetaData(stContext,"MoreGamePage");
+					if(null != uriPath) {
+						uri = Uri.parse(uriPath);
 					} else {
 						uri = Uri.parse("https://play.google.com/store/apps/developer?id=Crazy+Camp+Media");
 					}
-
 					Intent myAppLinkToMarket = new Intent(Intent.ACTION_VIEW, uri);
 					try {
 						stContext.startActivity(myAppLinkToMarket);
