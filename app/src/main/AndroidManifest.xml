@@ -30,10 +30,10 @@
             android:value="ca-mb-app-pub-5545962412010602/5331530639" />
         <meta-data
             android:name="Rewarded AppID"
-            android:value="app1b82d9170eab49de89" />
+            android:value="ca-app-pub-3940256099942544/5224354917" />
         <meta-data
             android:name="Rewarded Signature"
-            android:value="vz68143c00cd0844e0b7" />
+            android:value="ca-app-pub-3940256099942544/5224354917" />
     </application>
 
 </manifest>

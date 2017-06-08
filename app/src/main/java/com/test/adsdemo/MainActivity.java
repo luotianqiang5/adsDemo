@@ -91,10 +91,10 @@ public class MainActivity extends LaunchActivity  {
 		public void onClick(View v) {
 			switch (v.getId()) {
 				case R.id.preload_banner:
-					Uri uri = Uri.parse("market://details?id=com.crazycampmedia.android_forestdoctor");
-					Intent myAppLinkToMarket = new Intent(Intent.ACTION_VIEW, uri);
-					MainActivity.this.startActivity(myAppLinkToMarket);
-					//AdsManager.getInstance(MainActivity.this).preLoadAds(AdsType.BANNER);
+					//Uri uri = Uri.parse("market://details?id=com.crazycampmedia.android_forestdoctor");
+					//Intent myAppLinkToMarket = new Intent(Intent.ACTION_VIEW, uri);
+					//MainActivity.this.startActivity(myAppLinkToMarket);
+					AdsManager.getInstance(MainActivity.this).preLoadAds(AdsType.BANNER);
 					break;
 				case R.id.show_banne:
 					AdsManager.getInstance(MainActivity.this).showAds(AdsType.BANNER);
