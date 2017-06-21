@@ -28,6 +28,8 @@ import com.common.android.iap_googleplay.IapHelper;
 import com.common.android.iap_googleplay.PurchaseDatabase;
 import com.common.android.jni.MoreGamesActivityForJNI;
 import com.common.android.jni.STSystemFunction;
+import com.common.android.permission.PermissionHelper;
+import com.common.android.permission.PermissionJNI;
 import com.common.android.utils.Utils;
 
 
@@ -529,6 +531,7 @@ public abstract class LaunchActivity extends AppCompatActivity {
 		STSystemFunction.setup(this);
 		MoreGamesActivityForJNI.PLATFORM = getPlatformCode();
 		MoreGamesActivityForJNI.DEBUG_INFO = getDebugMode();
+		PermissionJNI.setup(this);
 	}
 
 	/**
@@ -887,9 +890,15 @@ public abstract class LaunchActivity extends AppCompatActivity {
 		if (requestCode == 1001) {
 			if (!mHelper.handleActivityResult(requestCode, resultCode, data)) {
 				super.onActivityResult(requestCode, resultCode, data);
+				PermissionHelper.getInstance().checkPermissionsGranted(requestCode);
 			}
 
 		}
+	}
+
+	public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+		Log.d("LaunchActivity", "-----onRequestPermissionsResult-------");
+		PermissionHelper.getInstance().notifyPermissionsChange(permissions, grantResults);
 	}
 
 	private OnPurchaseListener finishedListener = new OnPurchaseListener() {
