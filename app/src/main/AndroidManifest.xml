@@ -34,6 +34,12 @@
         <meta-data
             android:name="Rewarded Signature"
             android:value="ca-app-pub-3940256099942544/5224354917" />
+        <meta-data
+            android:name="Crosspromotion AppID"
+            android:value="566fb7f4f789825b4d7d8094" />
+        <meta-data
+            android:name="Crosspromotion Signature"
+            android:value="00c90874250ab969c2c9fc0cf39b4886ec63adfc" />
     </application>
 
 </manifest>

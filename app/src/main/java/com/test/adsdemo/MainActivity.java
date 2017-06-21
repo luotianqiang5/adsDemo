@@ -28,8 +28,8 @@ public class MainActivity extends LaunchActivity  {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		AdsManager.getInstance(this).setup(AdsType.REWARD | AdsType.BANNER);
-		AdsManager.getInstance(this).getAds(AdsType.REWARD).setListener(Adslis);
+		AdsManager.getInstance(this).setup(AdsType.CROSS | AdsType.BANNER);
+		AdsManager.getInstance(this).getAds(AdsType.CROSS).setListener(Adslis);
 		AdsManager.getInstance(this).getAds(AdsType.BANNER).setListener(Adslis);
 
 		this.findViewById(R.id.preload_banner).setOnClickListener(lis);
@@ -50,7 +50,7 @@ public class MainActivity extends LaunchActivity  {
 				public void run() {
 					if(var.getAdsType() == AdsType.BANNER)
 						findViewById(R.id.show_banne).setEnabled(true);
-					else if(var.getAdsType() == AdsType.REWARD)
+					else if(var.getAdsType() == AdsType.CROSS)
 						findViewById(R.id.show_rewared).setEnabled(true);
 				}
 			});
@@ -61,7 +61,7 @@ public class MainActivity extends LaunchActivity  {
 		public void onLoadedFail(AdsPlatform var) {
 			if(var.getAdsType() == AdsType.BANNER)
 				findViewById(R.id.show_banne).setEnabled(false);
-			else if(var.getAdsType() == AdsType.REWARD)
+			else if(var.getAdsType() == AdsType.CROSS)
 				findViewById(R.id.show_rewared).setEnabled(false);
 		}
 
@@ -100,10 +100,10 @@ public class MainActivity extends LaunchActivity  {
 					AdsManager.getInstance(MainActivity.this).showAds(AdsType.BANNER);
 					break;
 				case R.id.preload_rewared:
-					AdsManager.getInstance(MainActivity.this).preLoadAds(AdsType.REWARD);
+					AdsManager.getInstance(MainActivity.this).preLoadAds(AdsType.CROSS);
 					break;
 				case R.id.show_rewared:
-					AdsManager.getInstance(MainActivity.this).showAds(AdsType.REWARD);
+					AdsManager.getInstance(MainActivity.this).showAds(AdsType.CROSS);
 					break;
 			}
 		}

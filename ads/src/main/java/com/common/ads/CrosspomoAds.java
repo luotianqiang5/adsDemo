@@ -78,7 +78,6 @@ public class CrosspomoAds extends AdsPlatform implements Application.ActivityLif
 		Chartboost.startWithAppId(contextActivry,appId,appSignature);
 		Chartboost.setLoggingLevel(CBLogging.Level.ALL);
 		Chartboost.setDelegate(this.delegate);
-		Chartboost.setImpressionsUseActivities(true);
 		Chartboost.setShouldRequestInterstitialsInFirstSession(true);
 		Chartboost.setAutoCacheAds(false);
 		Chartboost.setShouldDisplayLoadingViewForMoreApps(false);
