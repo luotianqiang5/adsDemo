@@ -5,14 +5,7 @@
     <application
         android:allowBackup="true"
         android:supportsRtl="true" >
-        <activity android:name=".moregame.MarketMoreGame"
-            android:configChanges="orientation|keyboardHidden|screenSize|locale"
-            android:theme="@style/Theme.AppCompat.FullScreen">
-
-        </activity>
-        <meta-data android:name="severUrl"
-            android:value="http://www.crazycampmedia.com"
-            />
+    
     </application>
 
 </manifest>

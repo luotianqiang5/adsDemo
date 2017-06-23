@@ -39,6 +39,15 @@
         <meta-data
             android:name="Crosspromotion Signature"
             android:value="00c90874250ab969c2c9fc0cf39b4886ec63adfc" />
+
+        <activity android:name="com.common.android.moregame.MarketMoreGame"
+            android:configChanges="orientation|keyboardHidden|screenSize|locale"
+            android:theme="@style/Theme.AppCompat.FullScreen">
+
+        </activity>
+        <meta-data android:name="severUrl"
+            android:value="http://www.crazycampmedia.com"
+            />
     </application>
 
 </manifest>
