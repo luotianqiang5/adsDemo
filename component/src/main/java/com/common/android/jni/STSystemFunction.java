@@ -23,6 +23,7 @@ import com.chartboost.sdk.Chartboost;
 import com.common.android.LaunchActivity;
 import com.common.android.PlatformCode;
 import com.common.android.R;
+import com.common.android.moregame.MarketMoreGame;
 import com.common.android.newsblast.ErrorCode;
 import com.common.android.newsblast.NewsBean;
 import com.common.android.newsblast.NewsBlast;
@@ -109,35 +110,36 @@ public class STSystemFunction {
 	}
 
 	public void cacheMoreGame() {
-		Chartboost.cacheMoreApps(CBLocation.LOCATION_DEFAULT);
+
+		//Chartboost.cacheMoreApps(CBLocation.LOCATION_DEFAULT);
 	}
 
 	public void showMoreGame() {
-
-		if(Chartboost.hasMoreApps(CBLocation.LOCATION_DEFAULT)){
-			Chartboost.showMoreApps(CBLocation.LOCATION_DEFAULT);
-		}else
-		{
-			((Activity) stContext).runOnUiThread(new Runnable() {
-				@Override
-				public void run() {
-					Uri uri;
-					String uriPath = Utils.getMetaData(stContext,"MoreGamePage");
-					if(null != uriPath) {
-						uri = Uri.parse(uriPath);
-					} else {
-						uri = Uri.parse("https://play.google.com/store/apps/developer?id=Crazy+Camp+Media");
-					}
-					Intent myAppLinkToMarket = new Intent(Intent.ACTION_VIEW, uri);
-					try {
-						stContext.startActivity(myAppLinkToMarket);
-					} catch (ActivityNotFoundException e) {
-
-					}
-				}
-			});
-		}
-		Chartboost.cacheMoreApps(CBLocation.LOCATION_DEFAULT);
+		MarketMoreGame.openMoreGame(stContext);
+//		if(Chartboost.hasMoreApps(CBLocation.LOCATION_DEFAULT)){
+//			Chartboost.showMoreApps(CBLocation.LOCATION_DEFAULT);
+//		}else
+//		{
+//			((Activity) stContext).runOnUiThread(new Runnable() {
+//				@Override
+//				public void run() {
+//					Uri uri;
+//					String uriPath = Utils.getMetaData(stContext,"MoreGamePage");
+//					if(null != uriPath) {
+//						uri = Uri.parse(uriPath);
+//					} else {
+//						uri = Uri.parse("https://play.google.com/store/apps/developer?id=Crazy+Camp+Media");
+//					}
+//					Intent myAppLinkToMarket = new Intent(Intent.ACTION_VIEW, uri);
+//					try {
+//						stContext.startActivity(myAppLinkToMarket);
+//					} catch (ActivityNotFoundException e) {
+//
+//					}
+//				}
+//			});
+//		}
+//		Chartboost.cacheMoreApps(CBLocation.LOCATION_DEFAULT);
 	}
 
 	public String getSdCardPath() {

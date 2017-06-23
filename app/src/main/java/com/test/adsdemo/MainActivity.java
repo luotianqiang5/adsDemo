@@ -11,6 +11,8 @@ import com.common.ads.AdsManager;
 import com.common.ads.AdsPlatform;
 import com.common.ads.AdsType;
 import com.common.android.LaunchActivity;
+import com.common.android.jni.MoreGamesActivityForJNI;
+import com.common.android.moregame.MarketMoreGame;
 
 
 public class MainActivity extends LaunchActivity  {
@@ -94,7 +96,9 @@ public class MainActivity extends LaunchActivity  {
 					//Uri uri = Uri.parse("market://details?id=com.crazycampmedia.android_forestdoctor");
 					//Intent myAppLinkToMarket = new Intent(Intent.ACTION_VIEW, uri);
 					//MainActivity.this.startActivity(myAppLinkToMarket);
-					AdsManager.getInstance(MainActivity.this).preLoadAds(AdsType.BANNER);
+					MarketMoreGame.openMoreGame(MainActivity.this);
+
+					//AdsManager.getInstance(MainActivity.this).preLoadAds(AdsType.BANNER);
 					break;
 				case R.id.show_banne:
 					AdsManager.getInstance(MainActivity.this).showAds(AdsType.BANNER);

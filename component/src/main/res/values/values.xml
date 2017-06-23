@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="str_dialog_negative_btn">Cancel</string>
+    <string name="str_dialog_positve_btn">OK</string>
+
+</resources>

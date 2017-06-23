@@ -5,7 +5,7 @@ android {
     buildToolsVersion "23.0.2"
 
     defaultConfig {
-        applicationId "com.test.adsdemo"
+        applicationId "com.crazycampmedia.android_summericysnowcone"
         minSdkVersion 16
         targetSdkVersion 23
         versionCode 1
