@@ -46,7 +46,7 @@
 
         </activity>
         <meta-data android:name="severUrl"
-            android:value="http://www.crazycampmedia.com"
+            android:value="https://www.crazycampmedia.com"
             />
     </application>
 

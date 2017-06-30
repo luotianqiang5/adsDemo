@@ -134,15 +134,26 @@ public class MarketMoreGame extends AppCompatActivity {
         if(this.mWebView != null) {
             this.mWebView.loadUrl("about:blank");
         }
+        Activity activity = this;
+        while (activity.getParent() != null) {
+            activity = activity.getParent();
+        }
+        try {
+            AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+            builder.setMessage(msg);
+            builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    try {
+                        MarketMoreGame.this.finish();
+                    } catch (Exception e) {
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage(msg);
-        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int which) {
-                MarketMoreGame.this.finish();
-            }
-        });
-        builder.create().show();
+                    }
+                }
+            });
+            builder.create().show();
+        } catch (Exception e) {
+
+        }
     }
 
     private static Dialog showProgressDialog(Context context, String dialogMess) {
