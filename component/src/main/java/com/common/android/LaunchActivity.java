@@ -148,15 +148,15 @@ public abstract class LaunchActivity extends AppCompatActivity {
 		if (isFirstTimeRunning) {
 			sharedPre.edit().putBoolean(STR_ISFIRSTTIME, false).commit();
 		}
-		if (paltformCode == PlatformCode.GOOGLEPLAY) {
-			init_IAP_GP();
-		} else {
-			init_IAP_Amazon();
-		}
-		init_RateUs();
-		init_GCM();
+//		if (paltformCode == PlatformCode.GOOGLEPLAY) {
+//			init_IAP_GP();
+//		} else {
+//			init_IAP_Amazon();
+//		}
+	//	init_RateUs();
+	//	init_GCM();
 
-		onEvent_day();
+	//	onEvent_day();
 	}
 
 	@Override
