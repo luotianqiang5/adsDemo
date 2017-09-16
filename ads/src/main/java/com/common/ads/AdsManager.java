@@ -128,6 +128,20 @@ public class AdsManager {
 
 
 	public void setup(int adType){
+		if((AdsType.INTERSTITIAL&adType) == AdsType.INTERSTITIAL || (AdsType.REWARD & adType) == AdsType.REWARD){
+			String appId = AdsUitl.getMetaData(context,REWARDED_APPID);
+			String signature = AdsUitl.getMetaData(context,REWARDED_SIGNARURE);
+			String key;
+			if(AdsUitl.isTable(context))
+				key = PAD_INTERSTITIAL_KEY;
+			else
+				key = PHONE_INTERSTITIAL_KEY;
+			String value = AdsUitl.getMetaData(context,key);
+			if(value != null&&!value.isEmpty() &&appId != null&&signature != null && !appId.isEmpty() && !signature.isEmpty()) {
+				AdcolonyManager.getInstance().config(context,appId,signature,value);
+			}
+		}
+
 		if((AdsType.BANNER&adType) == AdsType.BANNER) {
 			String key;
 			if(AdsUitl.isTable(context))

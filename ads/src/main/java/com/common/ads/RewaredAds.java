@@ -4,64 +4,150 @@ package com.common.ads;
 import android.app.Activity;
 import android.app.Application;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
 
-import com.jirbo.adcolony.AdColony;
-import com.jirbo.adcolony.AdColonyAd;
-import com.jirbo.adcolony.AdColonyAdAvailabilityListener;
-import com.jirbo.adcolony.AdColonyAdListener;
-import com.jirbo.adcolony.AdColonyV4VCAd;
-import com.jirbo.adcolony.AdColonyV4VCListener;
-import com.jirbo.adcolony.AdColonyV4VCReward;
-
-
+import com.adcolony.sdk.*;
 /**
  * Created by luotianqiang1 on 16/9/2.
  */
-public class RewaredAds extends AdsPlatform implements AdColonyAdAvailabilityListener, AdColonyV4VCListener,AdColonyAdListener,Application.ActivityLifecycleCallbacks {
+public class RewaredAds extends AdsPlatform  {
 
 	public interface RewaredAdsListener extends AdsListener {
 		void onRewarded(String var,int amount,boolean isSkip);
 	}
 
+	boolean isConfig = false;
 	private String APP_ID;
 	private String ZONE_ID;
-    private AdColonyV4VCAd adColonyV4VCAd;
+	private AdColonyInterstitial adcad = null;
+	AdColonyReward adReward = null;
+	private boolean isPreloading = false;
+	private AdColonyInterstitialListener adclistener = new AdColonyInterstitialListener() {
+		@Override
+		public void onRequestFilled(AdColonyInterstitial adColonyInterstitial) {
+			if(isEqualsZoneId(adColonyInterstitial.getZoneID())) {
+				isPreloading = false;
+			adcad = adColonyInterstitial;
+		isLoad  = true;
+		if(listener != null) {
+
+			listener.onLoadedSuccess(RewaredAds.this);
+			if (isAutoShow)
+				show();
+		}
+		}
+		}
+
+		/** Ad request was not filled */
+		@Override
+		public void onRequestNotFilled( AdColonyZone zone )
+		{
+			if(isEqualsZoneId(zone.getZoneID())) {
+				isPreloading = false;
+				isLoad = false;
+				if(listener != null)
+					listener.onLoadedFail(RewaredAds.this);
+			}
+		}
+
+		/** Ad opened, reset UI to reflect state change */
+		@Override
+		public void onOpened( AdColonyInterstitial ad )
+		{
+			if(isEqualsZoneId(ad.getZoneID())){
+				adReward = null;
+						FullScreenAds.setFullScreenAdsShowing(true);
+		if(listener != null)
+			listener.onAdsOpened(RewaredAds.this);
+			}
+		}
+
+		/** Request a new ad if ad is expiring */
+		@Override
+		public void onExpiring( AdColonyInterstitial ad )
+		{
+			if(isEqualsZoneId(ad.getZoneID())){
+				isLoad = false;
+				adcad = null;
+			}
+		}
+
+		public void onClosed(AdColonyInterstitial ad) {
+			if (isEqualsZoneId(ad.getZoneID())) {
+				adcad = null;
+				isLoad = false;
+				FullScreenAds.setFullScreenAdsShowing(false);
+				if (adReward == null|| !adReward.success()) {
+					if (listener != null && listener instanceof RewaredAdsListener) {
+						((RewaredAdsListener) listener).onRewarded("", -1, true);
+					}
+
+				}
+				if (listener != null)
+					listener.onAdsClosed(RewaredAds.this);
+			}
+		}
+	};
+	private AdColonyAdOptions ad_options;
 	public  RewaredAds(Activity var, String app_id,String zone_id){
 		super(var);
 		APP_ID = app_id;
 		ZONE_ID = zone_id;
-		contextActivry.getApplication().registerActivityLifecycleCallbacks(this);
+	}
+
+	private  boolean isEqualsZoneId(String str){
+		return ZONE_ID.equals(str);
 	}
 
 	private void initConfig() {
-		if(!AdColony.isConfigured()){
-			AdColony.configure(contextActivry, "version:10,store:google", APP_ID, ZONE_ID);
-			AdColony.addAdAvailabilityListener(this);
-			AdColony.addV4VCListener(this);
+		if(!isConfig){
+			isConfig = true;
+			ad_options = new AdColonyAdOptions()
+					.enableConfirmationDialog(false)
+					.enableResultsDialog(false);
+			AdColony.setRewardListener( new AdColonyRewardListener()
+			{
+				@Override
+				public void onReward( AdColonyReward reward )
+				{
+					if(isEqualsZoneId(reward.getZoneID())){
+						RewaredAds.this.adReward = reward;
+								if(reward.success()) {
+			if(listener != null && listener instanceof  RewaredAdsListener) {
+				((RewaredAdsListener) listener).onRewarded(reward.getRewardName(), reward.getRewardAmount(),false);
+			}
 		}
-		 adColonyV4VCAd = (new AdColonyV4VCAd()).withListener(RewaredAds.this);
+					}
+				}
+			} );
+
+		}
 	}
 
 	@Override
 	public void preload() {
-		contextActivry.runOnUiThread(new Runnable() {
-			@Override
-			public void run() {
+		if(!isPreloading) {
+			isPreloading = true;
+			contextActivry.runOnUiThread(new Runnable() {
+				@Override
+				public void run() {
 
-				if (isLoaded()) {
-					if (listener != null) {
-						listener.onLoadedSuccess(RewaredAds.this);
+					if (isLoaded()) {
+						if (listener != null) {
+							listener.onLoadedSuccess(RewaredAds.this);
+						}
+						if (isAutoShow)
+							show();
+					} else {
+						initConfig();
+						if (adcad == null || adcad.isExpired()) {
+							AdColony.requestInterstitial(ZONE_ID, adclistener, ad_options);
+						}
 					}
-					if(isAutoShow)
-						show();
-				}else {
-					initConfig();
-					if(adColonyV4VCAd == null)
-						adColonyV4VCAd = (new AdColonyV4VCAd()).withListener(RewaredAds.this);
-
 				}
-			}
-		});
+			});
+		}
 	}
 
 	@Override
@@ -73,8 +159,7 @@ public class RewaredAds extends AdsPlatform implements AdColonyAdAvailabilityLis
 				@Override
 				public void run() {
 					initConfig();
-					adColonyV4VCAd = (new AdColonyV4VCAd()).withListener(RewaredAds.this);
-					adColonyV4VCAd.show();
+					adcad.show();
 				}
 			});
 			return true;
@@ -95,85 +180,5 @@ public class RewaredAds extends AdsPlatform implements AdColonyAdAvailabilityLis
 		return AdsType.REWARD;
 	}
 
-	@Override
-	public void onAdColonyAdAvailabilityChange(boolean b, String s) {
-		isLoad  = b;
-		if(listener != null) {
-			if(b) {
-				listener.onLoadedSuccess(this);
-				if(isAutoShow)
-					show();
-			}
-//			else
-//				listener.onLoadedFail(this);
-		}
-	}
 
-	@Override
-	public void onAdColonyAdAttemptFinished(AdColonyAd adColonyAd) {
-		FullScreenAds.setFullScreenAdsShowing(false);
-		if(adColonyAd.skipped() || adColonyAd.canceled()) {
-			if(listener != null && listener instanceof RewaredAdsListener) {
-				((RewaredAdsListener)listener).onRewarded("", -1, true);
-			}
-			if(listener != null)
-				listener.onAdsClosed(this);
-		}else if(adColonyAd.shown()){
-			if(listener != null)
-				listener.onAdsClosed(this);
-		}
-	}
-
-	@Override
-	public void onAdColonyAdStarted(AdColonyAd adColonyAd) {
-		FullScreenAds.setFullScreenAdsShowing(true);
-		if(listener != null)
-			listener.onAdsOpened(this);
-	}
-
-	@Override
-	public void onAdColonyV4VCReward(AdColonyV4VCReward adColonyV4VCReward) {
-		if(adColonyV4VCReward.success()) {
-			if(listener != null && listener instanceof  RewaredAdsListener) {
-				((RewaredAdsListener) listener).onRewarded(adColonyV4VCReward.name(), adColonyV4VCReward.amount(),false);
-			}
-		}
-	}
-
-	@Override
-	public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
-
-	}
-
-	@Override
-	public void onActivityStarted(Activity activity) {
-
-	}
-
-	@Override
-	public void onActivityResumed(Activity activity) {
-		if(activity == contextActivry)
-		AdColony.resume(activity);
-	}
-
-	@Override
-	public void onActivityPaused(Activity activity) {
-		if(activity == contextActivry)
-		AdColony.pause();
-	}
-
-	@Override
-	public void onActivityStopped(Activity activity) {
-
-	}
-
-	@Override
-	public void onActivitySaveInstanceState(Activity activity, Bundle outState) {
-
-	}
-
-	@Override
-	public void onActivityDestroyed(Activity activity) {
-
-	}
 }

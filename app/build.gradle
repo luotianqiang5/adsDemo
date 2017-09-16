@@ -5,7 +5,7 @@ android {
     buildToolsVersion "23.0.2"
 
     defaultConfig {
-        applicationId "com.crazycampmedia.android_summericysnowcone"
+        applicationId "com.crazycampmedia.android_deepfriedicecream"
         minSdkVersion 16
         targetSdkVersion 23
         versionCode 1
@@ -40,6 +40,7 @@ dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile 'com.android.support:appcompat-v7:23.2.1'
     compile 'com.google.android.gms:play-services:8.4.0'
+    compile 'com.adcolony:sdk:3.2.1'
     // compile (name:'ads', ext: 'aar')
     compile project(':ads')
     compile project(':component')

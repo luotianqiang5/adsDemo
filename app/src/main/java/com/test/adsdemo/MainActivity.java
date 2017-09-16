@@ -30,9 +30,9 @@ public class MainActivity extends LaunchActivity  {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		AdsManager.getInstance(this).setup(AdsType.CROSS | AdsType.BANNER);
-		AdsManager.getInstance(this).getAds(AdsType.CROSS).setListener(Adslis);
-		AdsManager.getInstance(this).getAds(AdsType.BANNER).setListener(Adslis);
+		AdsManager.getInstance(this).setup(AdsType.REWARD | AdsType.INTERSTITIAL);
+		AdsManager.getInstance(this).getAds(AdsType.REWARD).setListener(Adslis);
+		AdsManager.getInstance(this).getAds(AdsType.INTERSTITIAL).setListener(Adslis);
 
 		this.findViewById(R.id.preload_banner).setOnClickListener(lis);
 		this.findViewById(R.id.show_banne).setOnClickListener(lis);
@@ -50,9 +50,9 @@ public class MainActivity extends LaunchActivity  {
 			runOnUiThread(new Runnable() {
 				@Override
 				public void run() {
-					if(var.getAdsType() == AdsType.BANNER)
+					if(var.getAdsType() == AdsType.INTERSTITIAL)
 						findViewById(R.id.show_banne).setEnabled(true);
-					else if(var.getAdsType() == AdsType.CROSS)
+					else if(var.getAdsType() == AdsType.REWARD)
 						findViewById(R.id.show_rewared).setEnabled(true);
 				}
 			});
@@ -61,9 +61,9 @@ public class MainActivity extends LaunchActivity  {
 
 		@Override
 		public void onLoadedFail(AdsPlatform var) {
-			if(var.getAdsType() == AdsType.BANNER)
+			if(var.getAdsType() == AdsType.INTERSTITIAL)
 				findViewById(R.id.show_banne).setEnabled(false);
-			else if(var.getAdsType() == AdsType.CROSS)
+			else if(var.getAdsType() == AdsType.REWARD)
 				findViewById(R.id.show_rewared).setEnabled(false);
 		}
 
@@ -96,18 +96,18 @@ public class MainActivity extends LaunchActivity  {
 					//Uri uri = Uri.parse("market://details?id=com.crazycampmedia.android_forestdoctor");
 					//Intent myAppLinkToMarket = new Intent(Intent.ACTION_VIEW, uri);
 					//MainActivity.this.startActivity(myAppLinkToMarket);
-					MarketMoreGame.openMoreGame(MainActivity.this);
+				//	MarketMoreGame.openMoreGame(MainActivity.this);
 
-					//AdsManager.getInstance(MainActivity.this).preLoadAds(AdsType.BANNER);
+					AdsManager.getInstance(MainActivity.this).preLoadAds(AdsType.INTERSTITIAL);
 					break;
 				case R.id.show_banne:
-					AdsManager.getInstance(MainActivity.this).showAds(AdsType.BANNER);
+					AdsManager.getInstance(MainActivity.this).showAds(AdsType.INTERSTITIAL);
 					break;
 				case R.id.preload_rewared:
-					AdsManager.getInstance(MainActivity.this).preLoadAds(AdsType.CROSS);
+					AdsManager.getInstance(MainActivity.this).preLoadAds(AdsType.REWARD);
 					break;
 				case R.id.show_rewared:
-					AdsManager.getInstance(MainActivity.this).showAds(AdsType.CROSS);
+					AdsManager.getInstance(MainActivity.this).showAds(AdsType.REWARD);
 					break;
 			}
 		}

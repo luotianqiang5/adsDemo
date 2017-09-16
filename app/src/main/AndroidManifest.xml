@@ -22,17 +22,17 @@
             </intent-filter>
         </activity>
         <meta-data
-            android:name="Pad Banner"
-            android:value="ca-mb-app-pub-5545962412010602/6808238519" />
+            android:name="Pad Interstitial"
+            android:value="vz189bd99dc9074b1db6" />
         <meta-data
-            android:name="Phone Banner"
-            android:value="ca-mb-app-pub-5545962412010602/5331530639" />
+            android:name="Phone Interstitial"
+            android:value="vz189bd99dc9074b1db6" />
         <meta-data
             android:name="Rewarded AppID"
-            android:value="ca-app-pub-3940256099942544/5224354917" />
+            android:value="appa22eee5f62a149e5a1" />
         <meta-data
             android:name="Rewarded Signature"
-            android:value="ca-app-pub-3940256099942544/5224354917" />
+            android:value="vz62c73c6916ff4502bd" />
         <meta-data
             android:name="Crosspromotion AppID"
             android:value="566fb7f4f789825b4d7d8094" />
