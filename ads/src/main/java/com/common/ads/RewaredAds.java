@@ -154,11 +154,12 @@ public class RewaredAds extends AdsPlatform  {
 	public boolean show() {
 		if(FullScreenAds.isFullScreenAdsShowing()) {
 			return true;
-		}else if(isLoaded()){
+		}else if(isLoaded()&& adcad != null){
 			contextActivry.runOnUiThread(new Runnable() {
 				@Override
 				public void run() {
 					initConfig();
+					if(adcad != null)
 					adcad.show();
 				}
 			});
