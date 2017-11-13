@@ -106,7 +106,7 @@ public class MarketMoreGame extends AppCompatActivity {
     }
 
     @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
+    public boolean onKeyUp(int keyCode, KeyEvent event) {
         if ((keyCode == KeyEvent.KEYCODE_BACK)) {
             if (mWebView.canGoBack())
                 mWebView.goBack();
@@ -118,7 +118,7 @@ public class MarketMoreGame extends AppCompatActivity {
 
             return true;
         }
-        return super.onKeyDown(keyCode, event);
+        return super.onKeyUp(keyCode, event);
     }
 
     protected Dialog onCreateDialog(int id) {
