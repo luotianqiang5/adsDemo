@@ -27,6 +27,7 @@ import android.webkit.WebViewClient;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.common.ads.FullScreenAds;
 import com.common.android.R;
 import com.common.android.jni.MoreGamesActivityForJNI;
 import com.common.android.utils.Utils;
@@ -39,6 +40,7 @@ public class MarketMoreGame extends AppCompatActivity {
     public static void openMoreGame(final Context parent,String url){
         if(parent != null){
             loadUrl = url;
+            FullScreenAds.setFullScreenAdsShowing(true);
             ((Activity)parent).runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
@@ -109,7 +111,7 @@ public class MarketMoreGame extends AppCompatActivity {
             if (mWebView.canGoBack())
                 mWebView.goBack();
             else{
-
+                FullScreenAds.setFullScreenAdsShowing(false);
                 MarketMoreGame.this.finish();
             }
 
@@ -143,6 +145,7 @@ public class MarketMoreGame extends AppCompatActivity {
             builder.setMessage(msg);
             builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
+                    FullScreenAds.setFullScreenAdsShowing(false);
                     try {
                         MarketMoreGame.this.finish();
                     } catch (Exception e) {
